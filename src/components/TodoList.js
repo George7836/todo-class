@@ -1,31 +1,14 @@
 import { List, Typography } from '@mui/material'
 import React from 'react'
 import TodoItem from './TodoItem'
-
-const todos = [
-  {
-    id: 1,
-    content: 'New Task',
-    done: false
-  },
-  {
-    id: 2,
-    content: 'New Task2',
-    done: false
-  },
-  {
-    id: 3,
-    content: 'New Task3',
-    done: false
-  },
-]
-
+import { TodoContext } from '../context/TodoContexxt'
 class TodoList extends React.Component {
   constructor(props) {
     super(props)
   }
 
   render() {
+    const todos = this.context.todos
     return (
       <List sx={{ 
         width: '100%', 
@@ -40,6 +23,7 @@ class TodoList extends React.Component {
               id={todo.id}
               content={todo.content}
               done={todo.done}
+              title={todo.title}
             />
           ))
           : <Typography sx={{ padding: '10px' }}>There is no task</Typography>
@@ -48,5 +32,7 @@ class TodoList extends React.Component {
     )
   }
 }
+
+TodoList.contextType = TodoContext
 
 export default TodoList

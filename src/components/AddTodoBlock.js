@@ -1,12 +1,19 @@
 import { Box, Button, TextField } from '@mui/material'
 import React from 'react'
+import { TodoContext } from '../context/TodoContexxt'
+import { nanoid } from 'nanoid'
 
 class AddTodoBlock extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      title: '',
+      text: ''
+    }
   }
 
   render() {
+    const addTodo = this.context.addTodo
     return (
         <Box
           sx={{
@@ -20,9 +27,21 @@ class AddTodoBlock extends React.Component {
           <TextField 
             variant='outlined' 
             fullWidth
-            placeholder='Add new task ...'
+            value={this.state.title}
+            placeholder='Title'
             inputProps={{ style: { padding: '10px' } }}
             autoFocus
+            onChange={(e) => this.handleChangeTitle(e)}
+          />
+           <TextField 
+            variant='outlined' 
+            fullWidth
+            style={{ marginTop: '10px' }}
+            value={this.state.text}
+            placeholder='Your task'
+            inputProps={{ style: { padding: '10px'} }}
+            autoFocus
+            onChange={(e) => this.handleChangeText(e)}
           />
           <Button 
             variant="contained"
@@ -30,12 +49,29 @@ class AddTodoBlock extends React.Component {
               alignSelf: 'flex-end',
               marginTop: '10px'
             }}
+            onClick={() => this.addNewTask(addTodo)}
           >
             Add Task
           </Button>
         </Box>
     )
   }
+
+  handleChangeText(e) {
+    this.setState({text: e.target.value})
+  }
+
+  handleChangeTitle(e) {
+    this.setState({title: e.target.value})
+  }
+
+  addNewTask(addFunc) {
+    addFunc(nanoid(), this.state.text, this.state.title, false)
+    this.setState({text: ''})
+    this.setState({title: ''})
+  }
 }
+
+AddTodoBlock.contextType = TodoContext
 
 export default AddTodoBlock

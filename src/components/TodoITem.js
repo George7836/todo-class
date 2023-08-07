@@ -16,6 +16,7 @@ export default class TodoItem extends Component {
         key={this.props.id}
         disablePadding
         sx={{ padding: '5px' }}
+        style={{ display: 'flex', alignItems: 'flex-start'}}
       >
         <Checkbox
           checked={this.props.done}
@@ -32,7 +33,8 @@ export default class TodoItem extends Component {
             />
         } */}
         <ListItemText 
-          primary={this.props.content}
+          primary={this.props.title}
+          secondary={this.props.content}
           style={{"textDecoration": lineThrough, "wordBreak": "break-all"}}
         />
         {/* {editMode
