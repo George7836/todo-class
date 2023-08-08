@@ -8,22 +8,22 @@ class TodoList extends React.Component {
   }
 
   render() {
-    const todos = this.context.todos
     return (
       <List sx={{ 
         width: '100%', 
         bgcolor: 'background.paper', 
         marginTop: '15px'
       }}>
-        {todos.length > 0
+        {this.props.todos.length > 0
           ?
-          todos.map((todo) => (
+          this.props.todos.map((todo) => (
             <TodoItem 
               key={todo.id}
               id={todo.id}
               content={todo.content}
               done={todo.done}
               title={todo.title}
+              archived={todo.archived}
             />
           ))
           : <Typography sx={{ padding: '10px' }}>There is no task</Typography>

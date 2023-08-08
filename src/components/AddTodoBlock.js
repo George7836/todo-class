@@ -40,7 +40,6 @@ class AddTodoBlock extends React.Component {
             value={this.state.text}
             placeholder='Your task'
             inputProps={{ style: { padding: '10px'} }}
-            autoFocus
             onChange={(e) => this.handleChangeText(e)}
           />
           <Button 
@@ -66,7 +65,7 @@ class AddTodoBlock extends React.Component {
   }
 
   addNewTask(addFunc) {
-    addFunc(nanoid(), this.state.text, this.state.title, false)
+    addFunc(nanoid(), this.state.text, this.state.title, false, false)
     this.setState({text: ''})
     this.setState({title: ''})
   }

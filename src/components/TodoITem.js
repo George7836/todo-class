@@ -3,13 +3,26 @@ import { Checkbox, IconButton, ListItem, ListItemText, TextField } from '@mui/ma
 import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
 import DoneIcon from '@mui/icons-material/Done';
+import { TodoContext } from '../context/TodoContexxt';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import UnarchiveIcon from '@mui/icons-material/Unarchive';
+
 export default class TodoItem extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      editMode: false,
+      title: this.props.title,
+      content: this.props.content
+    }
   }
 
   render() {
     const lineThrough = this.props.done ? "line-through" : "none"
+    const deleteTodo = this.context.deleteTodo
+    const setCompleted = this.context.setCompleted
+    const updateTodo = this.context.updateTodo
+    const setToArchive = this.context.setToArchive
 
     return (
       <ListItem
@@ -20,40 +33,68 @@ export default class TodoItem extends Component {
       >
         <Checkbox
           checked={this.props.done}
+          onClick={() => setCompleted(this.props.id)}
         />
-        {/* {editMode 
-          ? <TextField 
-              variant='standard' 
-              fullWidth
-              inputProps={{ style: { paddingTop: 5 } }}
-            />
+        {this.state.editMode 
+          ? <>
+              <TextField 
+                variant='standard'
+                fullWidth
+                value={this.state.title}
+                onChange={(e) => this.setState({title: e.target.value})}
+                style={{ marginRight: 25 }}
+                inputProps={{ style: { paddingTop: 5 } }}
+              />
+              <TextField 
+                variant='standard' 
+                fullWidth
+                value={this.state.content}
+                onChange={(e) => this.setState({content: e.target.value})}
+                inputProps={{ style: { paddingTop: 5 } }}
+              />
+            </>
           : <ListItemText 
-              primary={this.props.content}
+              primary={this.props.title}
+              secondary={this.props.content}
               style={{"textDecoration": lineThrough, "wordBreak": "break-all"}}
             />
-        } */}
-        <ListItemText 
-          primary={this.props.title}
-          secondary={this.props.content}
-          style={{"textDecoration": lineThrough, "wordBreak": "break-all"}}
-        />
-        {/* {editMode
+        }
+        {this.props.archived
+          ? <IconButton onClick={() => setToArchive(this.props.id)}>
+              <UnarchiveIcon/>
+            </IconButton>
+          : <IconButton onClick={() => setToArchive(this.props.id)}>
+              <ArchiveIcon/>
+            </IconButton>
+        }
+        
+        {this.state.editMode
           ? 
-            <IconButton>
+            <IconButton 
+              onClick={() => this.handleUpdate(updateTodo)}
+             
+            >
               <DoneIcon />
             </IconButton>
           : 
-            <IconButton>
+            <IconButton 
+              onClick={() => this.setState({editMode: !this.state.editMode})}
+              style={{margin: '0 6px 0 10px'}}  
+            >
               <EditIcon />
             </IconButton>
-        } */}
-        <IconButton>
-          <EditIcon />
-        </IconButton>
-        <IconButton>
+        }
+        <IconButton onClick={() => deleteTodo(this.props.id)}>
           <ClearIcon />
         </IconButton>
       </ListItem>
     )
   }
+
+  handleUpdate(updateFunc) {
+    updateFunc(this.props.id, this.state.title, this.state.content)
+    this.setState({editMode: !this.state.editMode})
+  }
 }
+
+TodoItem.contextType = TodoContext
