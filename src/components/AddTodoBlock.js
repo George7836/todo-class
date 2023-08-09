@@ -14,6 +14,7 @@ class AddTodoBlock extends React.Component {
 
   render() {
     const addTodo = this.context.addTodo
+    const lightMode = this.context.theme
     return (
         <Box
           sx={{
@@ -21,15 +22,18 @@ class AddTodoBlock extends React.Component {
             marginTop: '70px',
             padding: '10px',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            backgroundColor: lightMode === 'light' ? 'background.paper' : 'rgba(255, 255, 255, 0.12)'
           }}
         >
           <TextField 
             variant='outlined' 
             fullWidth
+            error={this.state.title.length < 2 ? true : false}
+            helperText={this.state.title.length < 2 ? 'too short value' : null}
             value={this.state.title}
             placeholder='Title'
-            inputProps={{ style: { padding: '10px' } }}
+            inputProps={{ style: { padding: '10px', color: lightMode === 'dark' && '#fff' } }}
             autoFocus
             onChange={(e) => this.handleChangeTitle(e)}
           />
@@ -39,7 +43,7 @@ class AddTodoBlock extends React.Component {
             style={{ marginTop: '10px' }}
             value={this.state.text}
             placeholder='Your task'
-            inputProps={{ style: { padding: '10px'} }}
+            inputProps={{ style: { padding: '10px', color: lightMode === 'dark' && '#fff'} }}
             onChange={(e) => this.handleChangeText(e)}
           />
           <Button 
@@ -65,6 +69,9 @@ class AddTodoBlock extends React.Component {
   }
 
   async addNewTask(addFunc) {
+    if(this.state.title.length < 2) {
+      return false
+    }
     await addFunc(nanoid(), this.state.text, this.state.title, false, false)
     const filterTodos = this.context.filterTodos
     filterTodos(this.context.todos)

@@ -1,8 +1,5 @@
 import React from "react";
-import Header from "./components/Header";
-import TodoList from "./components/TodoList";
-import { Container } from "@mui/material";
-import AddTodoBlock from "./components/AddTodoBlock";
+import { GlobalStyles } from "@mui/material";
 import { TodoContext } from "./context/TodoContexxt";
 import { HashRouter } from "react-router-dom";
 import { AppRouter } from "./components/AppRouter";
@@ -51,18 +48,23 @@ class App extends React.Component {
     this.setSearchValue = (text) => {
       this.setState({searchValue: text})
     }
+    this.setLightMode = (mode) => {
+      this.setState({theme: mode})
+    }
 
     this.state = {
       todos: [],
       filteredTodos: [],
       searchValue: '',
+      theme: 'light',
       addTodo: this.addTodo,
       deleteTodo: this.deleteTodo,
       setCompleted: this.setCompleted,
       updateTodo: this.updateTodo,
       setToArchive: this.setToArchive,
       setSearchValue: this.setSearchValue,
-      filterTodos: this.filterTodos
+      filterTodos: this.filterTodos,
+      setLightMode: this.setLightMode
     }
   }
 
@@ -86,6 +88,10 @@ class App extends React.Component {
     return (
     <HashRouter basename="/">
         <TodoContext.Provider value={this.state}>
+          <GlobalStyles styles={{ body: {
+            backgroundColor: this.state.theme === 'light' ? '#f7f3f3' : '#121212'
+          }}}
+          />
           <AppRouter/>
         </TodoContext.Provider>
     </HashRouter>

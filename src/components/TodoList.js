@@ -8,10 +8,11 @@ class TodoList extends React.Component {
   }
 
   render() {
+    const lightMode = this.context.theme
     return (
       <List sx={{ 
         width: '100%', 
-        bgcolor: 'background.paper', 
+        bgcolor: lightMode === 'light' ? 'background.paper' : 'rgba(255, 255, 255, 0.12)', 
         marginTop: '15px'
       }}>
         {this.props.todos.length > 0
@@ -26,7 +27,7 @@ class TodoList extends React.Component {
               archived={todo.archived}
             />
           ))
-          : <Typography sx={{ padding: '10px' }}>There is no task</Typography>
+          : <Typography sx={{ padding: '10px', color: lightMode === 'dark' && '#fff' }}>There is no task</Typography>
         }
       </List>
     )

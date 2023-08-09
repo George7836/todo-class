@@ -23,15 +23,17 @@ export default class TodoItem extends Component {
     const setCompleted = this.context.setCompleted
     const updateTodo = this.context.updateTodo
     const setToArchive = this.context.setToArchive
+    const lightMode = this.context.theme
 
     return (
       <ListItem
         key={this.props.id}
         disablePadding
-        sx={{ padding: '5px' }}
+        sx={{ padding: '5px', color: lightMode === 'dark' && '#fff', }}
         style={{ display: 'flex', alignItems: 'flex-start'}}
       >
         <Checkbox
+          sx={{ color: lightMode === 'dark' && '#fff' }}
           checked={this.props.done}
           onClick={() => setCompleted(this.props.id)}
         />
@@ -43,49 +45,57 @@ export default class TodoItem extends Component {
                 value={this.state.title}
                 onChange={(e) => this.setState({title: e.target.value})}
                 style={{ marginRight: 25 }}
-                inputProps={{ style: { paddingTop: 5 } }}
+                inputProps={{ style: { paddingTop: 5, color: lightMode === 'dark' && '#fff' } }}
               />
               <TextField 
                 variant='standard' 
                 fullWidth
                 value={this.state.content}
                 onChange={(e) => this.setState({content: e.target.value})}
-                inputProps={{ style: { paddingTop: 5 } }}
+                inputProps={{ style: { 
+                    paddingTop: 5, 
+                    color: lightMode === 'dark' && '#fff'
+                }}}
               />
             </>
           : <ListItemText 
               primary={this.props.title}
               secondary={this.props.content}
-              style={{"textDecoration": lineThrough, "wordBreak": "break-all"}}
+              style={{
+                "textDecoration": lineThrough, 
+                "wordBreak": "break-all",
+              }}
+              secondaryTypographyProps={{ style: {
+                color: lightMode === 'dark' && '#fff'
+              }}}
             />
         }
         {this.props.archived
-          ? <IconButton onClick={() => this.handleSendToArchive(setToArchive)}>
-              <UnarchiveIcon/>
+          ? <IconButton 
+              onClick={() => this.handleSendToArchive(setToArchive)}
+            >
+              <UnarchiveIcon sx={{ color: lightMode === 'dark' && '#fff' }}/>
             </IconButton>
           : <IconButton onClick={() => this.handleSendToArchive(setToArchive)}>
-              <ArchiveIcon/>
+              <ArchiveIcon sx={{ color: lightMode === 'dark' && '#fff' }}/>
             </IconButton>
         }
         
         {this.state.editMode
           ? 
-            <IconButton 
-              onClick={() => this.handleUpdate(updateTodo)}
-             
-            >
-              <DoneIcon />
+            <IconButton onClick={() => this.handleUpdate(updateTodo)}>
+              <DoneIcon sx={{ color: lightMode === 'dark' && '#fff' }}/>
             </IconButton>
           : 
             <IconButton 
               onClick={() => this.setState({editMode: !this.state.editMode})}
               style={{margin: '0 6px 0 10px'}}  
             >
-              <EditIcon />
+              <EditIcon sx={{ color: lightMode === 'dark' && '#fff' }}/>
             </IconButton>
         }
         <IconButton onClick={() => this.handleDelete(deleteTodo)}>
-          <ClearIcon />
+          <ClearIcon sx={{ color: lightMode === 'dark' && '#fff' }}/>
         </IconButton>
       </ListItem>
     )
