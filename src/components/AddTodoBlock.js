@@ -64,8 +64,10 @@ class AddTodoBlock extends React.Component {
     this.setState({title: e.target.value})
   }
 
-  addNewTask(addFunc) {
-    addFunc(nanoid(), this.state.text, this.state.title, false, false)
+  async addNewTask(addFunc) {
+    await addFunc(nanoid(), this.state.text, this.state.title, false, false)
+    const filterTodos = this.context.filterTodos
+    filterTodos(this.context.todos)
     this.setState({text: ''})
     this.setState({title: ''})
   }

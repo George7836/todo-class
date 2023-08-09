@@ -1,10 +1,35 @@
 import React from 'react'
 import { InputBase, alpha, styled } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
+import { TodoContext } from '../context/TodoContexxt';
 
 class SearchField extends React.Component {
+  debounce;
+
   constructor(props) {
     super(props)
+    this.state = {
+      text: ''
+    }
+  }
+  
+  showResults(e) {
+    const setSearchValue = this.context.setSearchValue
+    this.setState({text: e.target.value})
+    setSearchValue(e.target.value)
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(prevState.text !== this.state.text) {
+      this.debounce = setTimeout(() => {
+        const filterTodos = this.context.filterTodos 
+        filterTodos(this.context.todos)
+      }, 500)
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.debounce)
   }
 
   render() {
@@ -15,12 +40,16 @@ class SearchField extends React.Component {
         </SearchIconWrapper>
         <StyledInputBase
           placeholder="Search…"
+          value={this.state.text}
+          onChange={(e) => this.showResults(e)}
           inputProps={{ 'aria-label': 'search' }}
         />
       </Search>
     )
   }
 }
+
+SearchField.contextType = TodoContext
 
 export default SearchField
 

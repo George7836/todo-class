@@ -60,10 +60,10 @@ export default class TodoItem extends Component {
             />
         }
         {this.props.archived
-          ? <IconButton onClick={() => setToArchive(this.props.id)}>
+          ? <IconButton onClick={() => this.handleSendToArchive(setToArchive)}>
               <UnarchiveIcon/>
             </IconButton>
-          : <IconButton onClick={() => setToArchive(this.props.id)}>
+          : <IconButton onClick={() => this.handleSendToArchive(setToArchive)}>
               <ArchiveIcon/>
             </IconButton>
         }
@@ -84,16 +84,30 @@ export default class TodoItem extends Component {
               <EditIcon />
             </IconButton>
         }
-        <IconButton onClick={() => deleteTodo(this.props.id)}>
+        <IconButton onClick={() => this.handleDelete(deleteTodo)}>
           <ClearIcon />
         </IconButton>
       </ListItem>
     )
   }
 
-  handleUpdate(updateFunc) {
-    updateFunc(this.props.id, this.state.title, this.state.content)
+ async handleUpdate(updateFunc) {
+    await updateFunc(this.props.id, this.state.title, this.state.content)
+    const filterTodos = this.context.filterTodos
+    filterTodos(this.context.todos)
     this.setState({editMode: !this.state.editMode})
+  }
+
+  async handleDelete(deleteFunc) {
+    await deleteFunc(this.props.id)
+    const filterTodos = this.context.filterTodos
+    filterTodos(this.context.todos)
+  }
+
+  async handleSendToArchive(setToArchiveFunc) {
+    await setToArchiveFunc(this.props.id)
+    const filterTodos = this.context.filterTodos
+    filterTodos(this.context.todos)
   }
 }
 

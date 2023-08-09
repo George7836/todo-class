@@ -13,31 +13,29 @@ export class AppRouter extends React.Component {
     return (
       <Routes>
         <Route path='/' element={<Layout/>}>
-          <Route index element={<TodoList todos={this.filterTodos('active')}/>}/>
-          <Route path='/completed' element={<TodoList todos={this.filterTodos('completed')}/>}/>
-          <Route path='/archive' element={<TodoList todos={this.filterTodos('archived')}/>}/>
+          <Route index element={<TodoList todos={this.filterTodosByCategory('active')}/>}/>
+          <Route path='/completed' element={<TodoList todos={this.filterTodosByCategory('completed')}/>}/>
+          <Route path='/archive' element={<TodoList todos={this.filterTodosByCategory('archived')}/>}/>
         </Route>
       </Routes>
     )
   }
 
-  filterTodos = (category) => {
+  filterTodosByCategory = (category) => {
     let filteredTodos
     switch(category) {
         case 'active':
-            filteredTodos = this.context.todos.filter((todo) => todo.done === false)
+            filteredTodos = this.context.filteredTodos.filter((todo) => todo.done === false)
             break
         case 'completed':
-            filteredTodos = this.context.todos.filter((todo) => todo.done === true)
+            filteredTodos = this.context.filteredTodos.filter((todo) => todo.done === true)
             break
         case 'archived': 
-            filteredTodos = this.context.todos.filter((todo) => todo.archived === true)
+            filteredTodos = this.context.filteredTodos.filter((todo) => todo.archived === true)
             break
     }
     return filteredTodos
   }
 }
-
-
 
 AppRouter.contextType = TodoContext

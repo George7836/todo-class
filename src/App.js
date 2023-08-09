@@ -41,14 +41,28 @@ class App extends React.Component {
         return todo
       })})
     }
+    this.filterTodos = (todos) => {
+      this.setState({filteredTodos: 
+        this.state.searchValue 
+        ? todos.filter((todo) => todo.content.toLowerCase().includes(this.state.searchValue.toLowerCase())) 
+        : [...todos]
+      })
+    }
+    this.setSearchValue = (text) => {
+      this.setState({searchValue: text})
+    }
 
     this.state = {
       todos: [],
+      filteredTodos: [],
+      searchValue: '',
       addTodo: this.addTodo,
       deleteTodo: this.deleteTodo,
       setCompleted: this.setCompleted,
       updateTodo: this.updateTodo,
-      setToArchive: this.setToArchive
+      setToArchive: this.setToArchive,
+      setSearchValue: this.setSearchValue,
+      filterTodos: this.filterTodos
     }
   }
 
@@ -56,6 +70,7 @@ class App extends React.Component {
     if(localStorage.getItem('todos')) {
       const data = localStorage.getItem('todos')
       this.setState({todos: JSON.parse(data)})
+      this.filterTodos(JSON.parse(data))
     } else {
       localStorage.setItem('todos', JSON.stringify(this.state.todos))
     }
